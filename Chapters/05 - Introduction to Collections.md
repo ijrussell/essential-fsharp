@@ -342,7 +342,10 @@ nums
 |> List.choose (fun v -> if v % 2 = 1 then Some (v * v) else None) 
 |> List.sum
 
-// Reduce is a partial function
+// Do not use reduce for this.
+// Firstly, reduce is a partial function, so we need to handle empty list
+// More importantly, the first item in the list is not processed by the function,
+// So the result will probably be incorrect
 match nums with
 | [] -> 0
 | items -> items |> List.reduce (fun acc v -> acc + if v % 2 = 1 then (v * v) else 0)
@@ -512,14 +515,14 @@ Add the following tests in the same module and run the tests:
 
 ```fsharp
     [<Fact>]
-    let ``when product does not exist in non-empty order`` () = 
+    let ``when product does not exist in non empty order`` () = 
         let myOrder = { Id = 1; Items = [ { ProductId = 1; Quantity = 1 } ] }
         let expected = { Id = 1; Items = [ { ProductId = 1; Quantity = 1 };{ ProductId = 2; Quantity = 5 } ] }
         let actual = myOrder |> addItem { ProductId = 2; Quantity = 5 } 
         actual |> should equal expected
 
     [<Fact>]
-    let ``when product exists in non-empty order`` () = 
+    let ``when product exists in non empty order`` () = 
         let myOrder = { Id = 1; Items = [ { ProductId = 1; Quantity = 1 } ] }
         let expected = { Id = 1; Items = [ { ProductId = 1; Quantity = 4 } ] }
         let actual = myOrder |> addItem { ProductId = 1; Quantity = 3 } 
@@ -614,7 +617,7 @@ module ``Removing a product`` =
         actual |> should equal expected
 
     [<Fact>]
-    let ``should do nothing for non-existant productid`` () = 
+    let ``should do nothing for non existent productid`` () = 
         let myOrder = { Id = 2; Items = [ { ProductId = 1; Quantity = 1 } ] }
         let expected = { Id = 2; Items = [ { ProductId = 1; Quantity = 1 } ] }
         let actual = myOrder |> removeProduct 2 
