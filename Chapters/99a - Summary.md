@@ -1,6 +1,6 @@
 # Summary
 
-Congratulations on reaching the end of this book. I hope that it has been a fun journey and that I have conveyed some of the joy that I get from working every day on F# codebases. Even if you don't get the chance to work in F#, many of the ideas and practices in this book will still positively impact the way that you think about and write code every day.
+Congratulations on reaching the end of this book. I hope that it has been a worthwhile and fun journey, and that I have conveyed some of the joy that I get from working every day on F# codebases. Even if you don't get the chance to work in F#, many of the ideas and practices in this book will still positively impact the way that you think about and write code every day.
 
 Programming in F# is different from working in C#. It's not just about the language features or the paradigm but it's the way that you are encouraged to explore different solutions to problems with minimal cost.
 
