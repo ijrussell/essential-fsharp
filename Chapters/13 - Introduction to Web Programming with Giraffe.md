@@ -128,6 +128,30 @@ let main args =
 
 There is a lot more code but anyone who has configured ASP.NET Core applications will know that there is a lot that you will probably need to configure that isn't in the minimal template. The version for Giraffe looks similar to the pre-minimal template code with a few exceptions like the new endpoint routing and the `notFoundHandler`.
 
+### Mutability
+
+One of the requirements of configuration for ASP.NET Core is the ability to set properties on non-F# objects. Up to this point in the book, we have not used mutability directly. We need to define a binding as `mutable` to be able to modify it:
+
+```fsharp
+let mutable x = 1
+
+x = 2 // false
+```
+
+We can't use the equality operator (`=`) to update the value; instead, it will compare x to 2, which is false.
+
+To update the value of `x`, we use the assignment operator (`<-`):
+
+```fsharp
+x <- 2
+
+x = 2 // true
+```
+
+You need to use the same operator to set properties of .NET objects. You do not need to mark .NET objects as mutable as they already are.
+
+If you accidentally use the equality operator, the compiler will give you a warning that you need to ignore the boolean result. If you run your code, it will not do what you are expecting but will not report an error.
+
 ### Endpoints
 
 Endpoint routing was actually introduced in Giraffe 5.x and is designed to integrate with the ASP.NET Core endpoint routing APIs. You can read more about Giraffe endpoint routing at https://github.com/giraffe-fsharp/Giraffe/blob/master/DOCUMENTATION.md#endpoint-routing.
