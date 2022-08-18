@@ -611,7 +611,7 @@ module ``Removing a product`` =
 
     [<Fact>]
     let ``when remove all items of existing productid`` () = 
-        let myEmptyOrder = { Id = 1; Items = [ { ProductId = 1; Quantity = 1 } ] }
+        let myOrder = { Id = 1; Items = [ { ProductId = 1; Quantity = 1 } ] }
         let expected = { Id = 1; Items = [] }
         let actual = myEmptyOrder |> removeProduct 1 
         actual |> should equal expected

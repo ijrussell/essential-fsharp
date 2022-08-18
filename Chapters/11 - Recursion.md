@@ -125,7 +125,7 @@ We start with a list of mappings that we are going to recurse over:
 let mapping = [ (3, "Fizz"); (5, "Buzz") ]
 ```
 
-Our fizzbuzz function using tail call optimisation and has an accumulator that will use string concatenation and an initial value of an empty string (`""`).
+Our fizzbuzz function is using tail call optimisation and has an accumulator that will use string concatenation and an initial value of an empty string (`""`).
 
 ```fsharp
 let fizzBuzz initialMapping n =
