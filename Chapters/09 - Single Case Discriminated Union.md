@@ -217,7 +217,7 @@ let isEqualTo expected actual =
     expected = actual
 
 let assertEqual customer spent expected =
-    Spend.create spent
+    Spend.Create spent
     |> Result.map (fun spend -> calculateTotal customer spend)
     |> isEqualTo (Ok expected)
 
@@ -248,7 +248,7 @@ type Customer =
 This also allows us to simplify the `calculateTotal` function:
 
 ```fsharp
-let calculateTotal customer (spend:Spend) =
+let calculateTotal (customer:Customer) (spend:Spend) =
     let discount = 
     	if spend.Value >= 100.0M then spend.Value * customer.Discount 
     	else 0.0M
@@ -275,7 +275,7 @@ type Customer =
 We now need to modify the `calculateTotal` function to use our new member function:
 
 ```fsharp
-let calculateTotal customer (spend:Spend) =
+let calculateTotal (customer:Customer) (spend:Spend) =
     let discount = spend.Value * customer.CalculateDiscountPercentage spend
     spend.Value - discount
 ```
@@ -484,7 +484,7 @@ module Spend =
 
 ## Summary
 
-We have covered quite a lot in this chapter but reducing our usage of raw primitives and adding more domain-centric types will improve the quality of our code as well as making more readable.
+We have covered quite a lot in this chapter but reducing our usage of raw primitives and adding more domain-centric types will improve the quality of our code as well as making it more readable.
 
 In this post we have learned about single-case discriminated unions. They allow us to restrict the range of values that a type can accept compared to raw primitives. We have also seen that we can extend types by adding helper functions and properties to them and the use of modules to do the same.
 

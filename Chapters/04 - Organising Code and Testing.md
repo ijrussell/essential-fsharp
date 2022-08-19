@@ -1,6 +1,6 @@
 # 4 - Organising Code and Testing
 
-In this chapter, we will be looking at how we can use organise our code using .NET Solutions, Projects, Namespaces, and F# Modules. In addition, we'll be writing our first real unit tests in F# with XUnit.
+In this chapter, we will be looking at how we can organise our code using .NET Solutions, Projects, Namespaces, and F# Modules. In addition, we'll be writing our first real unit tests in F# with XUnit.
 
 ## Getting Started
 
