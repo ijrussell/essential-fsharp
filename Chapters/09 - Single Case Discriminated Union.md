@@ -384,7 +384,7 @@ We also need to make one change to the assertion helper functions as we have mov
 
 ```fsharp
 let assertEqual customer spent expected =
-    Spend.Create spent
+    Spend.create spent
     |> Result.map (fun spend -> Customer.calculateTotal customer spend)
     |> isEqualTo (Ok expected)
 ```
@@ -452,7 +452,7 @@ let isEqualTo expected actual =
     expected = actual
 
 let assertEqual customer spent expected =
-    Spend.Create spent
+    Spend.create spent
     |> Result.map (fun spend -> Customer.calculateTotal customer spend)
     |> isEqualTo (Ok expected)
 
