@@ -94,26 +94,25 @@ If you want to see just how inefficient this is, try running `fib 50L`. It will 
 
 ```fsharp
 let fib (n:int64) =
-    let rec loop n (a,b) =
-        match n with
+    let rec loop x (a,b) =
+        match x with
         | 0L -> a
         | 1L -> b
-        | n -> loop (n-1L) (b, a+b)
-    loop n (0L,1L)
+        | x -> loop (x-1L) (b, a+b)
+    loop (n-1L) (0L,1L)
 ```
 
 Let's write out what happens (ignoring the type annotation):
 
 ```plaintext
-fib 5L = loop 5L (0L, 1L)
-       = loop 4L (1L, 1L+0L)
-       = loop 3L (1L, 1L+1L)
-       = loop 2L (2L, 1L+2L)
-       = loop 1L (3L, 2L+3L)
-       = 5L
+fib 5L = loop 4L (0L, 1L)
+       = loop 3L (1L, 1L+0L)
+       = loop 2L (1L, 1L+1L)
+       = loop 1L (2L, 1L+2L)
+       = 3L
 ```
 
-The 5th item in the sequence is `b` which is `2L+3L`. Try running `fib 50L`; It should return almost instantaneously.
+The 5th item in the sequence is 3L which is `1L+2L` as determined by the match expression in the loop inner function. Try running `fib 50L`; It should return almost instantaneously.
 
 Next, we'll now continue on our journey to find as many functional ways of solving FizzBuzz as possible. :)
 
