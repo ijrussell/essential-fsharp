@@ -110,10 +110,10 @@ fib 5L = loop 5L (0L, 1L)
        = loop 3L (1L, 1L+1L)
        = loop 2L (2L, 1L+2L)
        = loop 1L (3L, 2L+3L)
-       = 3L
+       = 5L
 ```
 
-The 5th item in the sequence is indeed 3 as the list starts at index 0. Try running `fib 50L`; It should return almost instantaneously.
+The 5th item in the sequence is `b` which is `2L+3L`. Try running `fib 50L`; It should return almost instantaneously.
 
 Next, we'll now continue on our journey to find as many functional ways of solving FizzBuzz as possible. :)
 
