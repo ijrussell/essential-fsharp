@@ -332,7 +332,7 @@ module AsyncResultDemo =
     } 
 ```
 
-Add some constants below the type definitions, marked with the [<Literal>] attribute:
+Add some constants below the type definitions, marked with the ```[<Literal>]``` attribute:
 
 ```fsharp
 [<Literal>]
