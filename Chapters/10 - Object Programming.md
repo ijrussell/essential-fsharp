@@ -125,7 +125,7 @@ type IFizzBuzz =
 ```
 
 > #### Abstract Classes
-> To convert IFizzBuzz into an abstract class, decorate it with the [<AbstractClass>] attribute.
+> To convert IFizzBuzz into an abstract class, decorate it with the ```[<AbstractClass>]``` attribute.
 
 Now we need to implement the interface in our *FizzBuzz* class type:
 

@@ -63,7 +63,7 @@ Now we can plug it into our parse function:
 let parse input =
     match input with
     | ValidDate dt -> printfn "%A" dt
-    | _ -> printfn "'%s{input}' is not a valid date"
+    | _ -> printfn $"'%s{input}' is not a valid date"
 
 parse "2019-12-20" // 2019-12-20 00:00:00
 parse "Hello" // 'Hello' is not a valid date

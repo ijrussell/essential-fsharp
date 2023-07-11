@@ -69,7 +69,7 @@ let tryParseDateTime (input:string) =
 
 Any of these versions are acceptable but in this case, I would choose either the if expression or the first pattern match as they are the easiest to discern their intent.
 
-Run the following examples in FSI with your chose version of the function:
+Run the following examples in FSI with your chosen version of the function:
 
 ```fsharp
 let isDate = tryParseDateTime "2019-08-01" // Some 01/08/2019 00:00:00 
@@ -437,7 +437,7 @@ let upgradeCustomer customer =
         | Error ex -> Error ex
 ```
 
-Now we do a similar thing for the `increaseCreditIfVip` function. This slightly different to the map function as we don't need to wrap the output in a result as the `increaseCreditIfVip` already does that. The function will be called `bind` for reasons we will see very soon:
+Now we do a similar thing for the `increaseCreditIfVip` function. This is slightly different to the map function as we don't need to wrap the output in a result as the `increaseCreditIfVip` already does that. The function will be called `bind` for reasons we will see very soon:
 
 ```fsharp
 // (Customer -> Result<Customer, exn>) -> Result<Customer, exn> -> Result<Customer, exn>

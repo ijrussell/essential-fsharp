@@ -373,6 +373,10 @@ let (|IsBoolean|_|) (input:string) =
     | "1" -> Some true 
     | "0" -> Some false
     | _ -> None
+    
+let (|IsValidDate|_|) (input:string) =
+    let (success, value) = input |> DateTime.TryParse
+    if success then Some value else None
 
 // string -> Result<string, ValidationError>
 let validateCustomerId customerId = 
