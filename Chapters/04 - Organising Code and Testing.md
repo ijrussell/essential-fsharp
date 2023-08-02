@@ -394,7 +394,7 @@ We are using Xunit as our test framework. There are other testing and assertion 
 This is an example of how an assertion would look if we used *FsUnit* instead of *XUnit*:
 
 ```fsharp
-open FsUnit
+open FsUnit.Xunit
 
 upgraded |> should equal expected
 ```
