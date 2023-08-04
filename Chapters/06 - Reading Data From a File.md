@@ -181,7 +181,7 @@ Create a function that takes a `seq<string>` as input, parses the input data, an
 let parse (data:string seq) = 
     data
     |> Seq.skip 1 // Ignore the header row
-    |> Seq.map (fun line -> 
+    |> Seq.choose (fun line -> 
         match line.Split('|') with
         | [| customerId; email; eligible; registered; dateRegistered; discount |] -> 
             Some { 
@@ -194,7 +194,6 @@ let parse (data:string seq) =
             }
         | _ -> None
     )
-    |> Seq.choose id // Ignore None and unwrap Some
 ```
 
 There are some new features in this function:
