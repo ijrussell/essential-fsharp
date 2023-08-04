@@ -239,8 +239,7 @@ Modify the `parse` function to use the new `parseLine` function:
 let parse (data:string seq) =
     data
     |> Seq.skip 1
-    |> Seq.map (fun x -> parseLine x)
-    |> Seq.choose id
+    |> Seq.choose (fun x -> parseLine x)
 ```
 
 We can simplify this function by removing the lambda, just like a Method Group in C#:
@@ -249,8 +248,7 @@ We can simplify this function by removing the lambda, just like a Method Group i
 let parse (data:string seq) =
     data
     |> Seq.skip 1
-    |> Seq.map parseLine
-    |> Seq.choose id
+    |> Seq.choose parseLine
 ```
 
 ## Testing the Code
@@ -384,8 +382,7 @@ let parseLine (line:string) : Customer option =
 let parse (data:string seq) =
     data
     |> Seq.skip 1
-    |> Seq.map parseLine
-    |> Seq.choose id
+    |> Seq.choose parseLine
 
 let output data =
     data 
