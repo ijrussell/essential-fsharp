@@ -249,7 +249,7 @@ let getValue input =
 Now we create a list of potential errors using a list comprehension, concatenate them using `List.concat`, and then check to see if the result has any errors. If there are no errors, we can safely call the create function:
 
 ```fsharp
-let validate (input:Customer) : Result<ValidatedCustomer, ConversionError list> =
+let validate (input:Customer) : Result<ValidatedCustomer, ValidationError list> =
     let customerId = input.CustomerId |> validateCustomerId
     let email = input.Email |> validateEmail
     let isEligible = input.IsEligible |> validateIsEligible
