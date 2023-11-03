@@ -255,7 +255,7 @@ let sayHelloNameHandler (name:string) : HttpHandler =
         |> ctx.WriteJsonAsync
 ```
 
-The `WriteJsonAsync` function serializes the anonymous record to JSON and writes the output to the body of the HTTP response. In addition, the function ensures that the HTTP *Content-Type* header to `application/json` and then correctly sets the *Content-Length* header. The JSON serializer can be configured in the ASP.NET Core startup code by registering a custom class of type `Json.ISerializer`. For details on this, consult the Giraffe documentation.
+The `WriteJsonAsync` function serializes the anonymous record to JSON and writes the output to the body of the HTTP response. In addition, the function ensures that the HTTP *Content-Type* header is set to `application/json` and then correctly sets the *Content-Length* header. The JSON serializer can be configured in the ASP.NET Core startup code by registering a custom class of type `Json.ISerializer`. For details on this, consult the Giraffe documentation.
 
 Giraffe is excellent for creating APIs but it is equally suited to server-side rendered web pages using the Giraffe View Engine.
 
