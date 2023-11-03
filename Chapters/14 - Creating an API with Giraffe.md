@@ -141,7 +141,7 @@ open GiraffeExample.TodoStore
 
 Move (Cut & Paste) the `apiTodoRoutes` handler function to the new *Todos.fs* file.
 
-You will need to fix the error in the `endpoints` binding by adding an open declaration to *Project.fs*:
+You will need to fix the error in the `endpoints` binding by adding an open declaration to *Program.fs*:
 
 ```fsharp
 open GiraffeExample
