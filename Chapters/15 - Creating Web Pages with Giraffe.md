@@ -246,7 +246,7 @@ We need to change the root route as we are now passing the list of *Todos* into 
 let endpoints =
     [
         GET [
-            route "/" (htmlView (Todos.Views.todoView Todos.Data.todoList)
+            route "/" (htmlView (Todos.Views.todoView Todos.Data.todoList))
         ]
         subRoute "/api/todo" apiTodoRoutes
         subRoute "/api" apiRoutes
