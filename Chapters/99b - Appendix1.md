@@ -24,6 +24,7 @@ dotnet new xunit -lang F# -o tests/MyProjectTests
 dotnet sln add tests/MyProjectTests/MyProjectTests.fsproj
 cd tests/MyProjectTests
 dotnet add reference ../../src/MyProject/MyProject.fsproj
+dotnet add package XUnit
 dotnet add package FsUnit
 dotnet add package FsUnit.XUnit
 dotnet build
