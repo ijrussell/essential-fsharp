@@ -277,8 +277,7 @@ Finally, we need to plug the validation into the pipeline:
 let parse (data:string seq) = 
     data
     |> Seq.skip 1
-    |> Seq.map parseLine
-    |> Seq.choose id
+    |> Seq.choose parseLine
     |> Seq.map validate
 ```
 
@@ -462,8 +461,7 @@ let validate (input:Customer) : Result<ValidatedCustomer, ValidationError list> 
 let parse (data:string seq) =
     data
     |> Seq.skip 1
-    |> Seq.map parseLine
-    |> Seq.choose id
+    |> Seq.choose parseLine
     |> Seq.map validate
 
 let output data =
