@@ -67,8 +67,7 @@ let parseLine (line:string) : Customer option =
 let parse (data:string seq) =
     data
     |> Seq.skip 1
-    |> Seq.map parseLine
-    |> Seq.choose id
+    |> Seq.choose parseLine
 
 let output data =
     data 
