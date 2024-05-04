@@ -1,7 +1,6 @@
 # Essential F\# Book
-This book is targeted at folks wanting to learn F# and assumes that the reader has no real knowledge
-of F# or functional programming. Some programming experience, particularly in C# or VB.NET,
-may be useful but not absolutely necessary.
+
+F# is a programming language for the .NET Platform that encourages a functional-first style of programming. This ebook is targeted at folks wanting to learn F# and assumes that the reader has little knowledge of F# or functional programming. Some programming experience, particularly using .NET with C# or VB.NET, may be useful but is not necessary.
 
 ## Read the book offline for free in PDF/EPUB
 

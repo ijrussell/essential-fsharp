@@ -2,9 +2,9 @@
 
 This book is targeted at folks wanting to learn F# and assumes that the reader has no real knowledge of F# or functional programming. Some programming experience, particularly in C# or VB.NET, may be useful but not absolutely necessary.
 
-Although F# has often been portrayed as a functional programming language, it isn't, and neither is this book purely about functional programming. You are not going to learn about Category Theory, Lambda Calculus, or even Monads. You will learn things about programming in a functional-first style as a by-product of how we solve problems with F#. You will discover how F#'s functional-first approach to programming [empowers everyone to write succinct, robust, and performant code](<https://fsharp.org/>). You will learn a lot of new terminology as you read this book but only enough to understand the features of F# that allow us to solve real-world problems with clearly expressed and concise code. What you will take away most from this book is an understanding of how F# supports us by generally making it easier for us to write code the F# way than it is to be a functional programming purist.
+Although F# has often been portrayed as a Functional Programming language, it isn't, and neither is this book purely about Functional Programming. You are not going to learn about Category Theory, Lambda Calculus, or even Monads. You will learn things about programming in a functional-first style as a by-product of how we solve problems with F#. You will discover how F#'s functional-first approach to programming [empowers everyone to write succinct, robust, and performant code](<https://fsharp.org/>). You will learn a lot of new terminology as you read this book but only enough to understand the features of F# that allow us to solve real-world problems with clearly expressed and concise code. What you will take away most from this book is an understanding of how F# supports us by making it easier for us to write code the F# way than it is to be a Functional Programming purist.
 
-For many historical reasons, functional programming has been viewed as difficult to learn and not very practical by most .NET developers. Functional programming is too often regarded as being too steeped in mathematics and academia to be of any use for writing the everyday line of business applications that most of us work on. This book is designed to help dispel those impressions. So the obvious question to ask is:
+For many historical reasons, Functional Programming has been viewed as difficult to learn and not very practical by most .NET developers. Functional Programming is too often regarded as being too steeped in mathematics and academia to be of any use for writing the everyday line of business applications that most of us work on. This book is designed to help dispel those impressions. So the obvious question to ask is:
 
 > What is F# good for?
 
@@ -24,7 +24,7 @@ My response was:
 
 I've been thinking about my answer and whilst I still think that the list is a good one, I think that I should have said that it is how the various features work together that makes F# so special, not the individual features themselves. It feels like a well-thought-out language that doesn't have features just because other languages have them.
 
-F# supports many paradigms, such as imperative and object-oriented programming but we will concentrate on how it encourages functional-first programming. My view of the choices F# has made in its language design can be summed up quite easily:
+F# supports many paradigms, such as Imperative and Object-Oriented Programming but we will concentrate on how it encourages functional-first programming. My view of the choices the designers of F# has made in the language can be summed up quite easily:
 
 > I enjoy functional programming but I like programming in F# even more.
 
@@ -36,7 +36,7 @@ This book covers the core features and practices that a developer needs to know 
 
 The original source for this book is two series of blog posts that I wrote on the [Trustbit blog](<https://trustbit.tech/blog>) in 2020/21. They have been significantly re-written to clarify and expand the explanations, to ensure that the code works on VS Code using the ionide F# extension, and to take advantage of some new F# features introduced in versions 5 and 6. 
 
-During the course of reading this book, you are going to be introduced to a wide range of features that are the essentials of F#:
+During the course of reading this ebook, you are going to be introduced to a wide range of features that are the essentials of F#:
 
 #### Chapter 1 - A Simple Domain-Modelling Exercise
 

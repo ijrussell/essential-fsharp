@@ -2,7 +2,7 @@
 
 ## Setting up your environment
 
-1. Install F#. The best and simplest way to do this is to install the latest [.NET SDK](<https://dotnet.microsoft.com/download>) (6.0.x at time of publishing).
+1. Install F#. The best and simplest way to do this is to install the latest [.NET SDK](<https://dotnet.microsoft.com/download>) (8.0.x at time of publishing).
 1. Install Visual Studio Code (VS Code).
 1. Install the ionide F# extension for VS Code. You may need to reload the environment. The installation page for the extension will tell you.
 1. Create a folder for the book and then folders for each book chapter to hold the code you will write.
@@ -37,4 +37,4 @@ Whilst the VS Code and ionide environment is not as fully featured as the full I
 
 This book contains lots of code. It will be tempting to copy and paste the code from the book but you may learn more by actually typing the code out as you go. I definitely learn more by doing it this way. 
 
-The time for talking has finished. Now it is time to dive into some F# code. In Chapter 1, we will work through a common business use case using F#.
+The time for talking has finished. Now it is time to dive into some F# code. In Chapter 1, we will work through a common business Use Case using F#.
