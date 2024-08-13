@@ -125,7 +125,7 @@ union Spend =
 	| Spend of decimal
 ```
 
-It is the convention to omit the bar (`|`) if this discriminated union was intended to only ever contain a single case, hence the name, single-case discriminated union. If a discriminated union currently only has one case but may have others in the future, you would generally include the bar.
+It is the convention to omit the bar (`|`) for unions that contain only a single case.
 
 You will notice that the `calculateTotal` function now has errors. We can fix that by deconstructing the *Spend* parameter value in the function using pattern matching:
 
