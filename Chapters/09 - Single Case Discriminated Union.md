@@ -16,7 +16,7 @@ This is where we left the code from the first chapter of this book:
 
 ```fsharp
 type RegisteredCustomer = {
-	Id : string
+    Id : string
 }
 
 type UnregisteredCustomer = {
