@@ -168,29 +168,7 @@ This is quite a nice extensible approach to the FizzBuzz problem as adding `(7, 
 let mapping = [(3, "Fizz"); (5, "Buzz"); (7, "Bazz")]
 ```
 
-Having produced a nice solution to the FizzBuzz problem using recursion, can we use the `List.fold` function to solve it? Of course we can!
-
-```fsharp
-let fizzBuzz n =
-    [ (3, "Fizz"); (5, "Buzz") ]
-    |> List.fold (fun acc (div, msg) -> 
-        if n % div = 0 then acc + msg else acc) ""
-    |> fun s -> if s = "" then string n else s
-
-[1..105] 
-|> List.iter (fizzBuzz >> printfn "%s")
-```
-
-We can modify the code to do all of the mapping in the fold function rather than passing the value on to another function:
-
-```fsharp
-let fizzBuzz n =
-    [ (3, "Fizz"); (5, "Buzz") ]
-    |> List.fold (fun acc (div, msg) -> 
-        match (if n % div = 0 then msg else "") with
-        | "" -> acc
-        | s -> if acc = string n then s else acc + s) (string n)
-```
+Having produced a nice solution to the FizzBuzz problem using recursion, 
 
 Whilst recursion is the primary mechanism for solving these types of problems in pure functional languages like Haskell, F# has some other approaches that may prove to be simpler to implement and potentially more performant.
 

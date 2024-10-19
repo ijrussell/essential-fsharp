@@ -54,8 +54,8 @@ Or we could use a *List Comprehension*:
 
 ```fsharp
 let items = [ 
-	for x in 1..5 do 
-		yield x 
+    for x in 1..5 do 
+        yield x 
 ]
 ```
 
@@ -275,6 +275,30 @@ let total = getTotal items
 
 There are situations where these additional operators can be useful but in a simple case like this, I prefer the previous version.
 
+Can we use the `List.fold` function to solve FizzBuzz? Of course we can!
+
+```fsharp
+let fizzBuzz n =
+    [ (3, "Fizz"); (5, "Buzz") ]
+    |> List.fold (fun acc (div, msg) -> 
+        if n % div = 0 then acc + msg else acc) ""
+    |> fun s -> if s = "" then string n else s
+
+[1..105] 
+|> List.iter (fizzBuzz >> printfn "%s")
+```
+
+We can modify the code to do all of the mapping in the fold function rather than passing the value on to another function:
+
+```fsharp
+let fizzBuzz n =
+    [ (3, "Fizz"); (5, "Buzz") ]
+    |> List.fold (fun acc (div, msg) -> 
+        match (if n % div = 0 then msg else "") with
+        | "" -> acc
+        | s -> if acc = string n then s else acc + s) (string n)
+```
+
 Fold is a very nice feature to have but you should try to use simpler, more specific functions like ```List.sumBy``` first.
 
 ## Grouping Data and Uniqueness
@@ -405,7 +429,7 @@ We need to create a function to add an item to the order. This function needs to
 
 ```fsharp
 let addItem item order =
-	// 1 - Prepend new item to existing order items
+    // 1 - Prepend new item to existing order items
     // 2 - Consolidate each product
     // 3 - Sort items in order by productid to make equality simpler
     // 4 - Update order with new list of items
@@ -497,7 +521,7 @@ Now we are going to add our first test which verifies that adding items to an em
 ```fsharp
 module ``Add item to order`` =
 
-	[<Fact>]
+    [<Fact>]
     let ``when product does not exist in empty order`` () = 
         let myEmptyOrder = { Id = 1; Items = [] }
         let expected = { Id = 1; Items = [ { ProductId = 1; Quantity = 3 } ] }
@@ -707,6 +731,6 @@ module ``Empty an order of all items`` =
 
 In this chapter, we have looked at some of the most useful functions within the *List* module. There are similar functions available in the *Seq* and *Array* modules as we will discover in the coming chapters. We have also seen that it is possible to use immutable data structures to provide important business functionality that is succinct and robust.
 
-We have only scratched the surface of what is possible with collections in F#. For more information on the List module, have a look at the [F# Docs](<https://fsharp.github.io/fsharp-core-docs/reference/fsharp-collections-listmodule.html>). Thanks to some awesome community assistance, there are code samples for each of the collection module functions.
+We have only scratched the surface of what is possible with collections in F#. For more information on the List module, have a look at the [F# Docs](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-collections-listmodule.html). Thanks to some awesome community assistance, there are code samples for each of the collection module functions.
 
 In the next chapter, we will look at how to handle a stream of data from a CSV source file.
