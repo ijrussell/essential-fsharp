@@ -8,10 +8,10 @@ It is designed for folks wanting to learn F# and assumes that the reader has no 
 
 You can download this book for free in PDF and EPUB formats from the following link:
 
-> https://leanpub.com/essential-fsharp
+> [Essential F#](https://leanpub.com/essential-fsharp).
 
 ## Contributions and Feedback
 
-Contributions to the book are very welcome. 
+Contributions to the book are very welcome via [Github](https://github.com/ijrussell/essential-fsharp).
 
-Follow me on Twitter -> https://x.com/ijrussell
+Follow me on [X](https://x.com/ijrussell) or [LinkedIn](https://www.linkedin.com/in/ian-russell-7b5301ba/).
