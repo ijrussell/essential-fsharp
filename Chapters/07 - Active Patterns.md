@@ -1,6 +1,6 @@
 # 7 - Active Patterns
 
-In this chapter, we will be extending our knowledge of pattern matching by looking at how we can write our own custom matchers with Active Patterns. There are a number of different Active Patterns types available and we will look at most of them in this chapter.
+In this chapter, we will be extending our knowledge of pattern matching by looking at how we can write our own custom matchers with `Active Patterns`. There are a number of different `Active Patterns` types available and we will look at most of them in this chapter.
 
 ## Setting Up
 

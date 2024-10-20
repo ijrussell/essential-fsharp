@@ -1,6 +1,6 @@
 # 10 - Object Programming
 
-In this chapter, we are going to see how we can utilise some of the object programming features that F# offers. F# is a functional-first language but sometimes it's beneficial to use objects, particularly when interacting with code written in other, less functional .NET languages or when you want to encapsulate some internal data structures and/or mutable state.
+The F# langauge encourages a functional-first style of programming but in this chapter, we are going to see how we can utilise some of the object programming features that F# offers. Sometimes it's beneficial to use objects, particularly when interacting with code written in other, less functional .NET languages or when you want to encapsulate some internal data structures and/or mutable state.
 
 F# can do most of the things that C#/VB.Net can do with objects but we are going to concentrate on the core object programming features; class types, interfaces, encapsulation, and equality.
 
@@ -27,8 +27,8 @@ type FizzBuzz() =
 
 Points of interest:
 
-- The parentheses after the type name are required. They can contain tupled arguments as we will see later in the chapter.
-- The member keyword defines the accessible members of the type.
+- The parentheses after the type name are required as they define the constructor. They can contain tupled arguments as we will see later in the chapter.
+- The member keyword defines the publically accessible members of the type.
 - The \_ is just a placeholder - it can be anything. It is the convention to use one of `_` or `this`.
 
 Now that we have created our class type, we need to instantiate it to use it:
@@ -37,21 +37,21 @@ Now that we have created our class type, we need to instantiate it to use it:
 let fizzBuzz = FizzBuzz()
 ```
 
-Unlike C#, we don't use *new* when creating an instance of a class type in F# except when it implements `IDisposible<'T>` and then we would write `use` instead of `let` to create a scope block.
+Unlike C#, we don't use the `new` keyword when creating an instance of a class type in F# except when it implements `IDisposible<'T>` and then we would write `use` instead of `let` to create a scope block.
 
 Now we can call the `Calculate` member function on the instance:
 
 ```fsharp
-let fifteen = fizzBuzz.Calculate(15) // FizzBuzz
+let fifteen = fizzBuzz.Calculate(5) // returns Buzz
 ```
 
-Whilst the parentheses for the parameter is optional, it's worth including them as the constructor arguments are a tuple and it helps me to see that I'm calling an object member. You can use the forward pipe should you wish:
+Whilst the parentheses for the parameter is optional, it's worth including them as it helps me to see that I'm calling an object member. You can use the forward pipe should you wish:
 
 ```fsharp
 let fifteen = 15 |> fizzBuzz.Calculate // FizzBuzz
 ```
 
-Let's create a function that will use our new *FizzBuzz* object type:
+Let's create a function that will use our new `FizzBuzz` object type:
 
 ```fsharp
 // int list -> string list
@@ -86,7 +86,7 @@ type FizzBuzz(mapping) =
         |> fun s -> if s = "" then string value else s
 ```
 
-Notice that we don't need to assign the constructor argument with a let binding to use it.
+Note that we don't need to assign the constructor argument with a let binding to use it.
 
 Now we need to pass the mapping in as the argument to the constructor in the doFizzBuzz function:
 
@@ -124,10 +124,11 @@ type IFizzBuzz =
     abstract member Calculate : int -> string
 ```
 
-> #### Abstract Classes
-> To convert IFizzBuzz into an abstract class, decorate it with the ```[<AbstractClass>]``` attribute.
+> **Abstract Classes**
+>
+> To convert IFizzBuzz into an abstract class, decorate it with the `[<AbstractClass>]` attribute.
 
-Now we need to implement the interface in our *FizzBuzz* class type:
+Now we need to implement the interface in our `FizzBuzz` class type:
 
 ```fsharp
 type FizzBuzz(mapping) =
@@ -141,7 +142,7 @@ type FizzBuzz(mapping) =
         member _.Calculate(value) = calculate value
 ```
 
-Nice and easy but you will see that we have a problem; the compiler has highlighted the `fizzBuzz.Calculate` method call in our `doFizzBuzz` function. This is because the `fizzBuzz` instance doesn't have a `Calculate` member, the interface *IFizzBuzz* does:
+Nice and easy but you will see that we have a problem; the compiler has highlighted the `fizzBuzz.Calculate` method call in our `doFizzBuzz` function. This is because the `fizzBuzz` instance doesn't have a `Calculate` member, the interface `IFizzBuzz` does:
 
 ```fsharp
 let doFizzBuzz =
@@ -150,7 +151,7 @@ let doFizzBuzz =
     |> List.map (fun n -> fizzBuzz.Calculate(n)) // Problem
 ```
 
-This is a problem because F# does not support implicit casting, so we have to upcast the instance to the *IFizzBuzz* type ourselves:
+This is a problem because F# does not support implicit casting, so we have to upcast the instance to the `IFizzBuzz` type ourselves using the upcast operator (`:>`):
 
 ```fsharp
 let doFizzBuzz =
@@ -263,11 +264,11 @@ doSomethingElse logger "MyData"
 
 This is a really useful feature if you have one-off services that you need to run, and for testing.
 
-Next, we move on to a more complex example of using interfaces, a recently used list.
+Next, we move on to a more complex example of using class types, a recently used list.
 
 ## Encapsulation
 
-We are going to create a recently used list as a class type. We will encapsulate a mutable collection within the class type and provide an interface for how we can interact with it. The *RecentlyUsedList* is an ordered list with the most recent item first but it is also a set, so each value can only appear once in the list. 
+We are going to create a recently used list as a class type. We will encapsulate a mutable collection within the class type and provide an interface for how we can interact with it. The `RecentlyUsedList` is an ordered list with the most recent item first but it is also a set, so each value can only appear once in the list.
 
 ```fsharp
 type RecentlyUsedList() =
@@ -291,7 +292,7 @@ type RecentlyUsedList() =
 
 The `ResizeArray<'T>` is the F# synonym for the standard .NET mutable `List<'T>`. Encapsulation ensures that you cannot access it directly, only via the members in the public interface.
 
-By looking at the signatures, we can see that `IsEmpty` and `Size` are read-only properties and that `Clear`, `Add`, and `TryGet` are functions. 
+By looking at the signatures, we can see that `IsEmpty` and `Size` are read-only properties and that `Clear`, `Add`, and `TryGet` are functions.
 
 Let's test our code in FSI. Run each of the following lines separately:
 
@@ -321,7 +322,7 @@ type IRecentlyUsedList =
     abstract member TryGet : int -> string option
 ```
 
-Add the capacity as a constructor argument and add the *IRecentlyUsedList* interface:
+Add the capacity as a constructor argument and add the `IRecentlyUsedList` interface:
 
 ```fsharp
 type RecentlyUsedList(capacity:int) =
@@ -373,7 +374,7 @@ mrul.TryGet(4) = Some "Test3" // Should return true
 
 Run the code in FSI.
 
-Encapsulation inside class types works really nicely, even for mutable data because you control access via members only.
+Encapsulation inside class types works really nicely, even for mutable data because you control access via members.
 
 ## Equality
 
