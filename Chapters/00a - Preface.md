@@ -1,5 +1,7 @@
 # Preface
 
+Welcome to the 3rd Edition of Essential F#.
+
 This book is targeted at folks wanting to learn F# and assumes that the reader has no real knowledge of F# or functional programming. Some programming experience, particularly in C# or VB.NET, may be useful but not absolutely necessary.
 
 Although F# has often been portrayed as a functional programming language, it isn't, and neither is this book purely about functional programming. You are not going to learn about Category Theory, Lambda Calculus, or even Monads. You will learn things about programming in a functional-first style as a by-product of how we solve problems with F#. You will discover how F#'s functional-first approach to programming [empowers everyone to write succinct, robust, and performant code](<https://fsharp.org/>). You will learn a lot of new terminology as you read this book but only enough to understand the features of F# that allow us to solve real-world problems with clearly expressed and concise code. What you will take away most from this book is an understanding of how F# supports us by generally making it easier for us to write code the F# way than it is to be a functional programming purist.

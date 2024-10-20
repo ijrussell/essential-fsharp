@@ -1,8 +1,6 @@
 # Appendix 2
 
-## CSS and JavaScript for Chapter 15
-
-CSS for Chapter 15
+## CSS for Chapter 15
 
 ```css
 /* Include the padding and border in an element's total width and height */
@@ -121,7 +119,9 @@ input {
 }
 ```
 
-JavaScript for Chapter 15 courtesy of Flavio Corpa (@FlavioCorpa):
+## JavaScript for Chapter 15
+
+Thanks to Flavio Corpa (@FlavioCorpa) for this modernised JavaScript code:
 
 ```javascript
 // Create a "close" button and append it to each list item

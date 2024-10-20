@@ -1,6 +1,6 @@
 # 7 - Active Patterns
 
-In this chapter, we will be extending our knowledge of pattern matching by looking at how we can write our own custom matchers with Active Patterns. There are a number of different Active Patterns types available and we will look at most of them in this chapter.
+In this chapter, we will be extending our knowledge of pattern matching by looking at how we can write our own custom matchers with `Active Patterns`. There are a number of different `Active Patterns` types available and we will look at most of them in this chapter.
 
 ## Setting Up
 
@@ -10,24 +10,34 @@ All of the code in this chapter can be written in an F# script file (.fsx) and r
 
 ## Partial Active Patterns
 
-Partial active patterns return an option as output because only a subset of the possible input values will produce a positive match.
+Partial active patterns return an `Option` as output because only a subset of the possible range of input values will produce a positive match.
 
-One area where Partial Active Patterns are really helpful is for validation and parsing. This is an example of parsing a string to a DateTime using a function rather than an active pattern:
+One area where `Partial Active Patterns` are really helpful is for validation and parsing. This is an example of parsing a string to a `DateTime` using a function rather than an `Active Pattern`:
 
 ```fsharp
 open System
 
 // string -> DateTime option
-let parse (input:string) =
+let parseDateTime (input:string) =
     match DateTime.TryParse(input) with
     | true, value -> Some value
     | false, _ -> None
 
-let isDate = parse "2019-12-20" // Some 2019-12-20 00:00:00
-let isNotDate = parse "Hello" // None
+let isDate = parseDateTime "2019-12-20" // Some 2019-12-20 00:00:00
+let isNotDate = parseDateTime "Hello" // None
 ```
 
-It works but we can't re-use the function body logic directly in a pattern match, except in the guard clause. Let's create a partial active pattern to handle the DateTime parsing for us:
+F# automatically converts `out` parameters into tuples. This is what happens to DateTime.TryParse:
+
+```csharp
+public static bool TryParse(string input, out DateTime value) {}
+```
+
+```fsharp
+let TryParse(input:string) : (bool, DateTime) = ...
+```
+
+We can't re-use the function body logic directly in a pattern match, except in the guard clause. Let's create a partial active pattern to handle the `DateTime` parsing for us:
 
 ```fsharp
 open System
@@ -39,7 +49,7 @@ let (|ValidDate|_|) (input:string) =
     | false, _ -> None
 ```
 
-Anytime that you see the banana clips ```(|...|)```, you are looking at an active pattern and if you see ``` (|...|_|)```, then you are looking at a partial active pattern. Remember, the partial part of the name comes from the use of the wildcard in the pattern definition, implying that the active pattern only returns success for a subset of the possible input values. 
+Anytime that you see the banana clips `(|...|)`, you are looking at an active pattern and if you see `(|...|_|)`, then you are looking at a partial active pattern. Remember, the partial part of the name comes from the use of the wildcard in the pattern definition, implying that the active pattern only returns success for a subset of the possible input values.
 
 Notice that we are returning the parsed value in the success case. We will be able to access that when we use the active pattern.
 
@@ -69,9 +79,9 @@ parse "2019-12-20" // 2019-12-20 00:00:00
 parse "Hello" // 'Hello' is not a valid date
 ```
 
-We can access the parsed date for the success case because we returned it from the partial active pattern. 
+We can access the parsed date for the success case because we returned it from the ``Partial Active Pattern`.
 
-There's more code but it is much more readable and we have functionality that we can re-use in other pattern matches. In this case, the partial active pattern returned the parsed value as part of the match. If you didn't care about the value being returned, you can return ```Some ()``` instead of ```Some value``` as shown in the following example:
+There's more code but it is much more readable and we have functionality that we can re-use in other pattern matches. In this case, the partial active pattern returned the parsed value as part of the match. If you didn't care about the value being returned, you can return `Some ()` instead of `Some value` as shown in the following example:
 
 ```fsharp
 open System
@@ -94,7 +104,7 @@ Partial active patterns are used a lot in activities like validation, as we will
 
 Parameterized partial active patterns differ from basic partial active patterns by supplying additional input items.
 
-We are going to investigate how an old interview favourite, FizzBuzz, can be implemented using a parameterized partial active pattern. Let's start with the canonical solution:
+We are going to investigate how FizzBuzz, can be implemented using a `Parameterized Partial Active Pattern`. Let's start with the canonical solution:
 
 ```fsharp
 let calculate i =
@@ -128,7 +138,7 @@ let calculate i =
     | _ -> i |> string
 ```
 
-Neither of these is any more readable than the original. How about if we could use an active pattern to do something like this?
+Neither of these is any more readable than the original. How about if we could use an `Active Pattern` to do something like this?
 
 ```fsharp
 let calculate i =
@@ -141,7 +151,7 @@ let calculate i =
 
 Note the single `&` to apply both parts of the pattern match in the calculate function. There is also a single `|` for the or case.
 
-We can use a parameterized partial active pattern to do this:
+We can create a `Parameterized Partial Active Pattern` to do this:
 
 ```fsharp
 // int -> int -> unit option
@@ -149,9 +159,9 @@ let (|IsDivisibleBy|_|) divisor n  =
     if n % divisor = 0 then Some () else None
 ```
 
-The parameterized name comes from the fact that we can supply additional parameters. The value being tested must always be the last parameter. In this case, we include the divisor parameter as well as the number we are checking.
+The `Parameterized` name comes from the fact that we can supply additional parameters. The value being tested must always be the last parameter. In this case, we include the divisor parameter as well as the number we are checking.
 
-This is much nicer but what happens if we need to add ```(7, Bazz)``` or even more options into the mix? Look at the code now:
+This is much nicer. However, what happens if we need to add `(7, Bazz)` or even more options into the mix? Look at the code now:
 
 ```fsharp
 let calculate i =
@@ -166,9 +176,7 @@ let calculate i =
     | _ -> i |> string
 ```
 
-Maybe not such a good idea? How confident would you be that you had covered all of the permutations? 
-
-An alternative suggested by Isaac Abraham would be to use a list as the input parameter of the active pattern:
+Maybe not such a good idea? How confident would you be that you had covered all of the permutations? An alternative suggested by [Isaac Abraham](https://www.compositional-it.com/) would be to use a `List` as the input parameter of the `Active Pattern`:
 
 ```fsharp
 let (|IsDivisibleBy|_|) divisors n  = 
@@ -218,7 +226,7 @@ let calculate mapping n =
 
 This is the type of function that F# developers write all the time.
 
-Back to active patterns! Let's have a look at another favourite interview question: Leap Years. The basic F# function looks like this;
+Back to `Active Patterns`! Let's have a look at another favourite interview question: Leap Years. The basic F# function looks like this;
 
 ```fsharp
 let isLeapYear year =
@@ -243,16 +251,7 @@ let isLeapYear year =
     | _ -> false
 ```
 
-There are special pattern matching operators for *and* (`&`) and *or* (`|`) for logic but not for *not*, so we have to write the negative case as well as the *IsDivisibleBy* active pattern. This doesn't apply to a `when` guard clause which uses the standard F# logic operators.
-
-You may be wondering why we wrote two parameterized partial active patterns when it seems like a nice candidate for a multi-case active pattern:
-
-```fsharp
-let (|IsDivisibleBy|NotDivisibleBy|) divisor n =
-    if n % divisor = 0 then IsDivisibleBy else NotDivisibleBy 
-```
-
-Sadly, whilst this does compile, it will not work in situ due to the way that the F# compiler processes multi-case active patterns. 
+There are special pattern matching operators for `and` (`&`) and `or` (`|`) for logic but not for `not`, so we have to write the negative case as well as the `IsDivisibleBy` `Active Pattern`. This doesn't apply to a `when` guard clause which uses the standard F# logic operators.
 
 There's more code than our original version but you could easily argue that it is more readable. We could also do a similar thing to the original with helper functions rather than Active Patterns;
 
@@ -301,9 +300,9 @@ type Suit = Hearts|Clubs|Diamonds|Spades
 type Card = Rank * Suit
 ```
 
-Rank and suit are discriminated unions with no data attached to any case.
+`Rank` and `Suit` are `Discriminated Unions` with no data attached to any case.
 
-The active pattern needs to take a *Card* as input, determine its suit, and return either Red or Black as output:
+The active pattern needs to take a `Card` as input, determine its `Suit`, and return either `Red` or `Black` as output:
 
 ```fsharp
 let (|Red|Black|) (card:Card) =
@@ -312,11 +311,11 @@ let (|Red|Black|) (card:Card) =
     | (_, Clubs) | (_, Spades) -> Black
 ```
 
-This is not a partial active pattern, so there is no wildcard.
+This is not a `Partial Active Pattern`, so there is no wildcard.
 
-Only cases that are used as output should be included in the active pattern.
+Only cases that are used as output should be included in the `Active Pattern`.
 
-We can now use the newly created active pattern in a function that will describe the colour of a chosen card:
+We can now use the newly created `Active Pattern` in a function that will describe the colour of a chosen card:
 
 ```fsharp
 let describeColour card =
@@ -330,7 +329,7 @@ describeColour (Two, Hearts) // The card is red
 
 ## Single-Case Active Patterns
 
-The last type of active pattern that we will look at is the single-case. The purpose of the single-case is to allow you to decompose an input in different ways. We will use a simple string for this.
+The last option we will look at is the `Single-Case Active Pattern`, whose purposeis to allow you to decompose an input in different ways. We will use a simple string for this.
 
 In this example, we are going to create some rules for creating a password. The rules will be:
 
