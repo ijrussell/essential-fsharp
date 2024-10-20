@@ -6,11 +6,13 @@ In this chapter, we are going to look at recursive functions, that is functions 
 
 Create a new folder for the code in this chapter.
 
-All of the code in this chapter can be run using FSI from `.fsx` files that you create.
+Create a new file called *basic-recursion.fsx* in the new folder.
 
 ## Solving The Problem
 
-We are going to start with a naive implementation of the factorial function (!):
+We are going to start with a naive implementation of the factorial function (`!`).
+
+> n factorial is the result of all of the numbers from 1 to n multiplied together.
 
 ```plaintext
 5! = 5 * 4 * 3 * 2 * 1 = 120
@@ -127,10 +129,18 @@ Next, we'll now continue on our journey to find as many functional ways of solvi
 
 ## Using Recursion to Solve FizzBuzz
 
-We start with a list of mappings that we are going to recurse over:
+We start with a list of tuples that we are going to recurse over:
 
 ```fsharp
 let mapping = [(3, "Fizz"); (5, "Buzz")]
+```
+
+Create the basic function skeleton:
+
+```fsharp
+let fizzBuzz initialMapping n =
+    let rec loop mapping acc = ...
+    loop initialMapping ""
 ```
 
 Our fizzbuzz function is using tail call optimisation and has an accumulator that will use string concatenation and an initial value of an empty string (`""`).
@@ -162,21 +172,17 @@ Finally, we can run the function and print out the results to the terminal:
 |> List.iter (printfn "%s")
 ```
 
-This is quite a nice extensible approach to the FizzBuzz problem as adding `(7, "Bazz")` is trivial.
+This is quite a nice extensible approach to the FizzBuzz problem as adding additional items such as `(7, "Bazz")` is trivial.
 
 ```fsharp
 let mapping = [(3, "Fizz"); (5, "Buzz"); (7, "Bazz")]
 ```
 
-Having produced a nice solution to the FizzBuzz problem using recursion, 
-
-Whilst recursion is the primary mechanism for solving these types of problems in pure functional languages like Haskell, F# has some other approaches that may prove to be simpler to implement and potentially more performant.
-
 Let's have a look at how we can solve another popular algorithm, Quicksort.
 
 ## Quicksort using recursion
 
-[Quicksort](https://www.tutorialspoint.com/data_structures_algorithms/quick_sort_algorithm.htm) is a nice algorithm to create in F# because of the availability of some very useful collection functions in the List module:
+[Quicksort](https://www.tutorialspoint.com/data_structures_algorithms/quick_sort_algorithm.htm) is a nice algorithm to create in F# because of the availability of some very useful functions in the `List` module:
 
 ```fsharp
 let rec qsort input =
@@ -215,11 +221,11 @@ Rustport,Irondale,1302
 
 We will assume that the return journeys are the same distance.
 
-Create a new file called `shortest-distance.fsx`.
+Create a new file called *shortest-distance.fsx*.
 
-Create a new folder called `resources`, add a file called `data.csv`, and copy the data above to it.
+Create a new folder called *resources*, add a file called *data.csv*, and copy the data above to it.
 
-Open the `shortest-distance.fsx` file.
+Open the *shortest-distance.fsx* file.
 
 Add the following declaration to the top of the file:
 
