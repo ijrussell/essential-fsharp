@@ -6,11 +6,11 @@ This book will introduce you to the world of programming in F#. Rather than begi
 >
 > We will be using F# Interactive to compile and run our code in this chapter. If you are not aware of how to use this, please read the section on **Setting up your environment** in the Introduction.
 
-Using VS Code, create a new folder to store the code from this chapter. Add a new file called *part1.fsx*. The .fsx file is an F# script file. We are going to use script files and run the code using F# Interactive rather than creating and running a console application via the dotnet CLI. 
+Using VS Code, create a new folder to store the code from this chapter. Add a new file called *part1.fsx*. The .fsx file is an F# script file. We are going to use script files and run the code using F# Interactive rather than creating and running a console application via the dotnet CLI.
 
 ## The Problem
 
-This problem comes from a post by [Chris Roff](<https://medium.com/@bddkickstarter/functional-bdd-5014c880c935>) where he looks at using F# and [Behaviour Driven Development](<https://cucumber.io/docs/bdd/>) together.
+This problem comes from a post by [Chris Roff](https://medium.com/@bddkickstarter/functional-bdd-5014c880c935) where he looks at using F# and [Behaviour Driven Development](https://cucumber.io/docs/bdd/) together.
 
 ```markdown
 Feature: Applying a discount
@@ -41,15 +41,15 @@ Along with some examples showing how you can verify that your code is working co
 
 ## Getting Started
 
-Along with simple datatypes like string, decimal, and boolean, F# has a powerful Algebraic Type System (ATS). Think of these types as simple data structures that you can use to compose larger data structures. We define a type using the `type` keyword as shown with this *tuple* type:
+Along with simple datatypes like string, decimal, and boolean, F# has a powerful Algebraic Type System (ATS). Think of these types as simple data structures that you can use to compose larger data structures. We define a type using the `type` keyword as shown with this `Tuple` type:
 
 ```fsharp
 type Customer = string * bool * bool
 ```
 
-This definition states that a *Customer* type is a tuple that consists of a *string* and two *booleans*. This means that a *tuple* is defined as an *AND* type. Tuples in F# do not have named parts, so a consumer of your type would have to guess the meaning of the data. Note the use of the capital letter at the start of the name of the type, commonly referred to as *Pascal Case*. Most things other than type definitions use *Camel Case*, where the first letter is in lower case.
+This definition states that a `Customer` type is a `Tuple` that consists of a `string` and two `booleans`. This means that a `Tuple` is defined as an `AND` type. Tuples in F# do not have named parts, so a consumer of your type would have to guess the meaning of the data. Note the use of the capital letter at the start of the name of the type, commonly referred to as `Pascal Case`. Most things other than type definitions use `Camel Case`, where the first letter is in lower case.
 
-We create an instance of the *Customer* type using the `let` keyword:
+We create an instance of the `Customer` type using the `let` keyword:
 
 ```fsharp
 // string * bool * bool
@@ -83,7 +83,7 @@ type Customer = { Id:string; IsEligible:bool; IsRegistered:bool }
 
 The record type, like the tuple, is an *AND* type, so in this example, a *Customer* consists of an Id which is a string value, and two boolean values called *IsEligible* and *IsRegistered*. Record types, like most of the types we will see through this book, are immutable, that is they cannot be changed once created. This means that all of the data to create a *Customer* record must be supplied when an instance is created.
 
-Instead of defining the record type on a single line, we can also put each field on a separate line. 
+Instead of defining the record type on a single line, we can also put each field on a separate line.
 
 > WARNING: Tabs are not supported by F#, so your IDE/editor needs to be able to convert tabs to spaces, which most do including VS code.
 
