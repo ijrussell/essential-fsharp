@@ -6,17 +6,19 @@ In this chapter, we are going to look at recursive functions, that is functions 
 
 Create a new folder for the code in this chapter.
 
-All of the code in this chapter can be run using FSI from .fsx files that you create.
+Create a new file called *basic-recursion.fsx* in the new folder.
 
 ## Solving The Problem
 
-We are going to start with a naive implementation of the factorial function (!):
+We are going to start with a naive implementation of the factorial function (`!`).
+
+> n factorial is the result of all of the numbers from 1 to n multiplied together.
 
 ```plaintext
 5! = 5 * 4 * 3 * 2 * 1 = 120
 ```
 
-To create a recursive function, we use the *rec* keyword and we would create a function like this:
+To create a recursive function, we use the `rec` keyword and we would create a function like this:
 
 ```fsharp
 // int -> int
@@ -26,7 +28,7 @@ let rec fact n =
     | n -> n * fact (n-1)
 ```
 
-You'll notice that we have two cases: a base case, in this example where n  equals 1, at which point the recursion ends, and a general case of greater than 1 which is recursive. If we were to write out what happens as we run the recursion, it would look like this:
+You'll notice that we have two cases: a base case, in this example where n equals 1, at which point the recursion ends, and a general case of greater than 1 which is recursive. If we were to write out what happens as we run the recursion, it would look like this:
 
 ```text
 fact 5 = 5 * fact 4
@@ -40,11 +42,20 @@ fact 5 = 5 * fact 4
        = 120
 ```
 
-This is a problem because you can't perform any calculations until you've completed all of the iterations but you also need to store all of the parts as well. This means that the larger n gets, the more memory you need to perform the calculation and it can also lead to stack overflows. We can solve this problem with **Tail Call Optimisation**.
+This is a problem because you can't perform any calculations until you've completed all of the iterations but you also need to store all of the parts as well. This means that the larger n gets, the more memory you need to perform the calculation; This can rapidly lead to stack overflows. We can solve this problem with a technique called `Tail Call Optimisation`.
 
 ## Tail Call Optimisation
 
-There are a few possible approaches available but we are going to use an accumulator. The accumulator is passed around the recursive function on each iteration:
+There are a few possible approaches available but we are going to use the simplist, which is using an accumulator. The accumulator is passed around the recursive function on each iteration carrying the current state:
+
+```fsharp
+let rec fact n acc =
+    match n with
+    | 1 -> acc
+    | _ -> fact (n-1) (acc * n)
+```
+
+########################
 
 ```fsharp
 let fact n =
@@ -68,9 +79,9 @@ fact 5 = loop 5 1
        = 120
 ```
 
-This is much simpler than the previous example, requires very little memory, and is efficient.
+This is much simpler than the previous example, requires little memory, and is very efficient.
 
-Now that we've learnt about tail call optimisation using an accumulator, let's look at a harder example, the Fibonacci Sequence.
+Now that we've learned about Tail Call Optimisation using an accumulator, let's look at a harder example, the Fibonacci Sequence.
 
 ## Expanding the Accumulator
 
@@ -114,14 +125,22 @@ fib 5L = loop 4L (0L, 1L)
 
 The 5th item in the sequence is 3L which is `1L+2L` as determined by the match expression in the loop inner function. Try running `fib 50L`; It should return almost instantaneously.
 
-Next, we'll now continue on our journey to find as many functional ways of solving FizzBuzz as possible. :)
+Next, we'll now continue on our journey to find as many functional ways of solving FizzBuzz as possible.
 
 ## Using Recursion to Solve FizzBuzz
 
-We start with a list of mappings that we are going to recurse over:
+We start with a list of tuples that we are going to recurse over:
 
 ```fsharp
-let mapping = [ (3, "Fizz"); (5, "Buzz") ]
+let mapping = [(3, "Fizz"); (5, "Buzz")]
+```
+
+Create the basic function skeleton:
+
+```fsharp
+let fizzBuzz initialMapping n =
+    let rec loop mapping acc = ...
+    loop initialMapping ""
 ```
 
 Our fizzbuzz function is using tail call optimisation and has an accumulator that will use string concatenation and an initial value of an empty string (`""`).
@@ -133,7 +152,9 @@ let fizzBuzz initialMapping n =
         | [] -> if acc = "" then string n else acc
         | head::tail -> 
             let value = 
-                head |> (fun (div, msg) -> if n % div = 0 then msg else "") 
+                head 
+                |> (fun (div, msg) -> 
+                    if n % div = 0 then msg else "") 
             loop tail (acc + value)
     loop initialMapping ""
 ```
@@ -151,43 +172,17 @@ Finally, we can run the function and print out the results to the terminal:
 |> List.iter (printfn "%s")
 ```
 
-This is quite a nice extensible approach to the FizzBuzz problem as adding `(7, "Bazz")` is trivial.
+This is quite a nice extensible approach to the FizzBuzz problem as adding additional items such as `(7, "Bazz")` is trivial.
 
 ```fsharp
-let mapping = [ (3, "Fizz"); (5, "Buzz"); (7, "Bazz") ]
+let mapping = [(3, "Fizz"); (5, "Buzz"); (7, "Bazz")]
 ```
-
-Having produced a nice solution to the FizzBuzz problem using recursion, can we use the `List.fold` function to solve it? Of course we can!
-
-```fsharp
-let fizzBuzz n =
-    [ (3, "Fizz"); (5, "Buzz") ]
-    |> List.fold (fun acc (div, msg) -> 
-        if n % div = 0 then acc + msg else acc) ""
-    |> fun s -> if s = "" then string n else s
-
-[1..105] 
-|> List.iter (fizzBuzz >> printfn "%s")
-```
-
-We can modify the code to do all of the mapping in the fold function rather than passing the value on to another function:
-
-```fsharp
-let fizzBuzz n =
-    [ (3, "Fizz"); (5, "Buzz") ]
-    |> List.fold (fun acc (div, msg) -> 
-        match (if n % div = 0 then msg else "") with
-        | "" -> acc
-        | s -> if acc = string n then s else acc + s) (string n)
-```
-
-Whilst recursion is the primary mechanism for solving these types of problems in pure functional languages like Haskell, F# has some other approaches that may prove to be simpler to implement and potentially more performant.
 
 Let's have a look at how we can solve another popular algorithm, Quicksort.
 
 ## Quicksort using recursion
 
-[Quicksort](<https://www.tutorialspoint.com/data_structures_algorithms/quick_sort_algorithm.htm>) is a nice algorithm to create in F# because of the availability of some very useful collection functions in the List module:
+[Quicksort](https://www.tutorialspoint.com/data_structures_algorithms/quick_sort_algorithm.htm) is a nice algorithm to create in F# because of the availability of some very useful functions in the `List` module:
 
 ```fsharp
 let rec qsort input =
@@ -204,9 +199,7 @@ The `List.partition` function splits a list into two based on a predicate functi
 
 ## Recursion with Hierarchical Data
 
-Recursion can be used to create and deconstruct hierarchical data structures. We are going to tackle Episode 2.1 of the Trustbit Transport Tycoon challenge:
-
-https://github.com/trustbit/exercises/blob/master/transport-tycoon_21.md
+Recursion can be used to create and deconstruct hierarchical data structures. We are going to tackle Episode 2.1 of the [Trustbit Transport Tycoon challenge](https://github.com/trustbit/exercises/blob/master/transport-tycoon_21.md):
 
 We are given a map and some CSV data detailing the distances between connected locations:
 
@@ -230,7 +223,7 @@ We will assume that the return journeys are the same distance.
 
 Create a new file called *shortest-distance.fsx*.
 
-Create a new folder called *resources*, add a file called *data.csv*, and add the data above to it.
+Create a new folder called *resources*, add a file called *data.csv*, and copy the data above to it.
 
 Open the *shortest-distance.fsx* file.
 
@@ -248,7 +241,7 @@ type Tree<'T> =
     | Leaf of 'T
 ```
 
-Add the *Tree* type to the file.
+Add the `Tree` type to the file.
 
 We are going to tackle this problem in three stages:
 
@@ -263,7 +256,11 @@ Let's get started!
 We need to define a record type to hold the data that we load from the CSV file:
 
 ```fsharp
-type Connection = { Start:string; Finish:string; Distance:int }
+type Connection = { 
+    Start:string
+    Finish:string
+    Distance:int 
+}
 ```
 
 We next need to write a function that takes a file path and returns the loaded data:
@@ -286,7 +283,7 @@ let loadData path =
     |> Map.ofList
 ```
 
-Instead of returning a *Connection list*, we are returning *Map<string,Connection list>*. A Map is a read-only dictionary that better suits our needs since the question we will ask of this data is which routes are there from a location?
+Instead of returning a `Connection list`, we are returning `Map<string, Connection list>`. A Map is a read-only dictionary that better suits our needs since the question we will ask of this data is which routes are there from a location?
 
 We need to call this new function with a start and finish location, so we will add that code:
 
@@ -299,17 +296,21 @@ let run start finish =
 let result = run "Cogburg" "Leverstorm"
 ```
 
-Run the code in FSI. At the moment, you will see the data from the *Map*.
+Run the code in FSI. At the moment, you will see the data from the `Map`.
 
 ### Find Possible Routes
 
-We are going to define a record type that defines a waypoint on our route. It will include data on where we are, how we got there, and how far we have travelled to get here. Not only does this save time when it comes to calculating the shortest route but it will be very helpful in the next stage. Let's define our *Waypoint* type:
+We are going to define a record type that defines a waypoint on our route. It will include data on where we are, how we got there, and how far we have travelled to get here. Not only does this save time when it comes to calculating the shortest route but it will be very helpful in the next stage. Let's define our `Waypoint` type:
 
 ```fsharp
-type Waypoint = { Location:string; Route:string list; TotalDistance:int }
+type Waypoint = { 
+    Location:string
+    Route:string list
+    TotalDistance:int 
+}
 ```
 
-We need to create a function that determines where we can go to next that we haven't already been to: 
+We need to create a function that determines where we can go to next that we haven't already been to:
 
 ```fsharp
 // Connection list -> Waypoint -> Waypoint list
@@ -426,9 +427,17 @@ type Tree<'T> =
     | Branch of 'T * Tree<'T> seq
     | Leaf of 'T
 
-type Waypoint = { Location:string; Route:string list; TotalDistance:int }
+type Waypoint = { 
+    Location:string
+    Route:string list
+    TotalDistance:int 
+}
 
-type Connection = { Start:string; Finish:string; Distance:int }
+type Connection = { 
+    Start:string
+    Finish:string
+    Distance:int 
+}
 
 // string -> Map<string, Connection list>
 let loadData path =
@@ -492,12 +501,12 @@ let result = run "Cogburg" "Leverstorm"
 
 ## Other Uses Of Recursion
 
-Recursion is great for handling hierarchical data like the file system and XML, converting between flat data and hierarchies, and for event loops or loops where there is no defined finish. 
+Recursion is great for handling hierarchical data like the file system and XML, converting between flat data and hierarchies, and for event loops or loops where there is no defined finish.
 
-As always, Scott Wlaschin's excellent [site](<https://fsharpforfunandprofit.com/posts/recursive-types-and-folds-3b/#series-toc>) has many posts on the topic.
+As always, Scott Wlaschin's excellent website [fsharpforfunandprofit](https://fsharpforfunandprofit.com/posts/recursive-types-and-folds-3b/#series-toc) has many posts on the topic.
 
 ## Summary
 
 In this chapter, we have looked at recursion in F#. In particular, we have looked at the basics and how to use accumulators with tail call optimisation to make recursion more efficient. Finally, we used recursion to help us solve a more complex problem involving hierarchical data.
 
-In the next chapter, we will look at a feature we met in Chapter 8 on functional validation: Computation Expressions.
+In the next chapter, we will take a deeper look at a feature we met in Chapter 8 on functional validation: Computation Expressions.

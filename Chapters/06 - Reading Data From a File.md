@@ -4,13 +4,13 @@ In this chapter, we will introduce the basics of reading and parsing external da
 
 ## Setting Up
 
-In a new folder for this chapter, create a console application by typing the following into a VS Code Terminal window:
+Create a new folder for this chapter and then create a console application by typing the following into a VS Code Terminal window:
 
 ```plaintext
 dotnet new console -lang F#
 ```
 
-Using the Explorer view, create a folder called *resource*s in the code folder for this chapter and then create a new file called *customers.csv*. Copy the following data into the new file:
+Using the Explorer view, create a folder called *resources* in the code folder for this chapter and then create a new file called *customers.csv*. Copy the following data into the new file:
 
 ```text
 CustomerId|Email|Eligible|Registered|DateRegistered|Discount
@@ -53,9 +53,9 @@ let readFile path = // string -> seq<string>
 
 There are a few new things in this simple function!
 
-The `seq {...}` type is called a Sequence Expression. The code inside the curly brackets will create a sequence of strings. We could have done the same with *list* and *array* but most of the System.IO methods output `IEnumerable<'T>` and `seq {...}` is the F# equivalent to `IEnumerable<'T>`.
+The `seq {...}` type is called a Sequence Expression. The code inside the curly brackets will create a sequence of strings. We could have done the same with `list` and `array` but most of the System.IO methods output `IEnumerable<'T>` and `seq {...}` is the F# synonym for `IEnumerable<'T>`.
 
-The *StreamReader* class implements the `IDisposable<'T>` interface. Just like in C#, we need to make sure the code calls the `Dispose()` method when it has finished using it. To do this, we use the `use` keyword which is the equivalent of `using` in C#. The indenting defines the scope of the disposable; in this case, the `Dispose()` method will be called when the sequence has completed being generated. It is required that we use the `new` keyword when we create instances that implement `IDisposable<'T>`.
+The `StreamReader` class implements the `IDisposable<'T>` interface. Just like in C#, we need to make sure the code calls the `Dispose()` method when it has finished using it. To do this, we use the `use` keyword. The indenting defines the scope of the disposable; in this case, the `Dispose()` method will be called when the sequence has completed being generated. It is required that we use the `new` keyword when we create instances that implement `IDisposable<'T>`.
 
 We need to write some code in the main function to call our `readFile` function and output the data to the output window;
 
@@ -72,7 +72,7 @@ You must leave the `0` at the end of the main function as this tells dotnet that
 
 We are using a built-in constant, `__SOURCE_DIRECTORY__`, to determine the current source code directory.
 
-The Seq module has a wide range of functions available, similar to the List and Array modules. The `Seq.iter` function will iterate over the sequence, perform an action, and return *unit*.
+The Seq module has a wide range of functions available, similar to the `List` and `Array` modules. The `Seq.iter` function will iterate over the sequence, perform an action, and return `unit`.
 
 The code in *Program.fs* should now look like this:
 
@@ -98,7 +98,7 @@ let main argv =
 
 Run the code by typing `dotnet run` in the Terminal.
 
-To handle potential errors from loading a file, we are going to add some error handling to the *readFile* function:
+To handle potential errors from loading a file, we are going to add some error handling to the `readFile` function:
 
 ```fsharp
 // string -> Result<seq<string>,exn>
@@ -145,7 +145,7 @@ let main argv =
 
 Run the program to check that it still works by typing `dotnet run` in the Terminal.
 
-Sadly, we have introduced a subtle bug here when we have an exception; the exception will not get caught because `seq {...}` is lazily evaluated. If you want to test it out, try a path that does not exist. Thankfully, it is very easy to fix:
+Sadly, we have introduced a subtle bug here! When we have an exception, it will not get caught because `seq {...}` is lazily evaluated. If you want to test it out, try a path that does not exist. Thankfully, it is very easy to fix:
 
 ```fsharp
 // string -> Result<seq<string>,exn>
@@ -285,7 +285,7 @@ let import (dataReader:DataReader) path =
     | Error ex -> printfn "Error: %A" ex.Message
 ```
 
-We can use the type abbreviation like an Interface with exactly one function in the *readFile* function but it does mean modifying our code a little to use an alternate function style:
+We can use the type abbreviation like an Interface with exactly one function in the `readFile` function but it does mean modifying our code a little to use an alternate function style:
 
 ```fsharp
 //string -> Result<string seq,exn>
@@ -308,7 +308,7 @@ let main argv =
     0
 ```
 
-If we use import with *readFile* regularly, we can use partial application to create a new function that does that for us:
+If we use import with `readFile` regularly, we can use partial application to create a new function that does that for us:
 
 ```fsharp
 let importWithFileReader = import readFile
@@ -338,7 +338,7 @@ let fakeDataReader : DataReader =
 import fakeDataReader "_"
 ```
 
-You can use any function that satisfies the *DataReader* function signature.
+You can use any function that satisfies the `DataReader` function signature.
 
 ## Final Code
 
