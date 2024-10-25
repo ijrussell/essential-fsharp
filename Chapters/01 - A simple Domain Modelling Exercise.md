@@ -37,7 +37,7 @@ Sarah is not a Registered Customer
 Only Registered Customers can be Eligible
 ```
 
-Along with some examples showing how you can verify that your code is working correctly, there are a number of domain-specific words and concepts that we may want to represent in our code. We will start with a simple but naive solution and then we'll see how F#'s types can help us make it much more domain-centric and as an added benefit, be less susceptible to bugs.
+Along with some examples showing how you can verify that your code is working correctly, there are a number of domain-specific words and concepts that we may want to represent in our code. We will start with a simple but naive solution and then we'll see how F#'s types can help us make it more domain-centric and as an added benefit, be less susceptible to bugs.
 
 ## Getting Started
 
@@ -75,29 +75,31 @@ let (id, isEligible, isRegistered) = fred
 
 We have bound the identifiers `id`, `isEligible`, and `isRegistered` to the data in the `fred` binding.
 
-Rather than use a *tuple*, we will create a *Record* type that solves the property name issue. We can define our initial customer record type like this:
+Rather than use a `Tuple`, we will create a `Record` type that solves the property name issue. We can define our initial customer record type like this:
+
+```fsharp
+type Customer = {
+    Id: string
+    IsEligible: bool
+    IsRegistered: bool
+}
+```
+
+Notice how the properties are aligned. F# makes use of `Significant Whitespace`, so alignment is important for scope. Alignment issues are one of the first things you should look at if the compiler warns you of an error in your code.
+
+> **WARNING**
+>
+> Tabs are not supported by F#, so your IDE/editor needs to be able to convert tabs to spaces, which most do.
+
+The `Record` type, like the `Tuple`, is an `AND` type, so in this example, a `Customer` consists of an `Id` which is a `string` value, and two `boolean` values called `IsEligible` and `IsRegistered`. `Record` types, like most of the types we will see through this book, are immutable, that is they cannot be changed once created. This means that all of the data to create a `Customer` must be supplied when an instance is created.
+
+If your `Record` type is simple, you can define on a single line:
 
 ```fsharp
 type Customer = { Id:string; IsEligible:bool; IsRegistered:bool }
 ```
 
-The record type, like the tuple, is an *AND* type, so in this example, a *Customer* consists of an Id which is a string value, and two boolean values called *IsEligible* and *IsRegistered*. Record types, like most of the types we will see through this book, are immutable, that is they cannot be changed once created. This means that all of the data to create a *Customer* record must be supplied when an instance is created.
-
-Instead of defining the record type on a single line, we can also put each field on a separate line.
-
-> WARNING: Tabs are not supported by F#, so your IDE/editor needs to be able to convert tabs to spaces, which most do including VS code.
-
-```fsharp
-type Customer = {
-    Id : string
-    IsEligible : bool
-    IsRegistered : bool
-}
-```
-
-Notice how the properties are aligned. F# makes use of *Significant Whitespace*, so alignment is important for scope. Alignment issues are one of the first things you should look at if the compiler warns you of an error in your code.
-
-If you put the named values on separate lines, you no longer need to use the semi-colon separator. Spaces between the name value's label and type are allowed and they do not need to be consistent.
+If you put the named values on separate lines, you need to use the semi-colon separator. Spaces between the name value's label and type are allowed and they do not need to be consistent.
 
 To create an instance of a customer we would write the following **below the type definition**:
 
@@ -105,9 +107,9 @@ To create an instance of a customer we would write the following **below the typ
 let fred = { Id = "Fred"; IsEligible = true; IsRegistered = true } // Customer
 ```
 
-The F# compiler has inferred the type of the value bound to the *fred* identifier to be a Customer. By using the let keyword, we have bound the identifier *fred* to that instance of a Customer. 
+The F# compiler has inferred the type of the value bound to the `fred` identifier to be a `Customer`. By using the `let` keyword, we have bound the identifier `fred` to that instance of a `Customer`.
 
-Another option that we have is to use the following style which is better when you have more properties to make your code easier to read:
+We can also define `fred` over multiple lines:
 
 ```fsharp
 let fred = { 
@@ -125,13 +127,13 @@ You can annotate the type on the value binding if you like:
 let fred : Customer = { Id = "Fred"; IsEligible = true; IsRegistered = true }
 ```
 
-If there are multiple record types defined with the same structure, the compiler will not be able to infer the type, so we will need to annotate the identifier with the type.
+If there are multiple `Record` types defined with the same structure, the compiler will infer the last one created, so we will need to annotate the identifier with the type.
 
-We are not going to use the *fred* binding, so you can delete that line of code.
+We are not going to use the `fred` binding, so you can delete it.
 
 If you have used languages like C# or Java, you may have been surprised by the strict ordering of the code. The F# compiler works from the top of the file, downwards. It might seem a little odd at first but you soon get used to it. It has some really nice advantages for how we write and verify our code as well as making the compiler's job easier. This ordering applies at the project level too, so your source code (*.fs*) files need to be ordered in the same way, not alphabetically.
 
-Below the *Customer* type, we need to create a function to calculate the total that takes a *Customer* and a *Spend* (decimal) as input parameters and returns the *Total* (decimal) as output:
+Below the `Customer` type, we need to create a `Function` to calculate the total that takes a `Customer` and a `Spend` (`decimal`) as input parameters and returns the `Total` (`decimal`) as output:
 
 ```fsharp
 // Customer -> decimal -> decimal
@@ -143,21 +145,21 @@ let calculateTotal (customer:Customer) (spend:decimal) : decimal =
     total
 ```
 
-The M suffix at the end of a number tells the compiler that the number is a decimal.
+The `M` suffix at the end of a number tells the compiler that the number is a `decimal`.
 
 There are a few things to note about functions:
 
-- We have used ```let``` again to define the function and inside the function to define the discount and total bindings.
+- We have used `let` again to define the function and inside the function to define the discount and total bindings.
 - The discount and total bindings are scoped to the function and are not visible outside the function.
 - There is no container, such as a class, because functions are first-class citizens.
 - The return type is to the right of the input arguments.
 - No return keyword is needed as the last line is returned automatically.
 - Nesting using significant whitespace is used to define scope. Tabs are not allowed.
-- We used an ```if``` expression that must return the same type for true and false routes.
+- We used an `if` expression that must return the same type for true and false routes.
 
 > **Expressions** are used throughout F# programming since they always return an output. This makes them easy to compose with other expressions and easy to test. In contrast, statements do not return an output, so are not composable.
 
-The comment above the function definition shows the function signature, which is **Customer -> decimal -> decimal**. The item at the end of the signature, after the last arrow, is the return type of the function. This function signature reads as *this function takes a Customer and a decimal as inputs and returns a decimal as output*. This is not strictly true as you will discover in the next chapter. Your IDE will normally show you the function signature or you can see it by hovering your mouse over the function name.
+The comment above the `Function definition` shows the `Function Signature`, which is `Customer -> decimal -> decimal`. The item at the end of the signature, after the last arrow, is the return type of the function. This function signature reads as *this function takes a Customer and a decimal as inputs and returns a decimal as output*. This is not strictly true as you will discover in the next chapter. Your IDE will normally show you the function signature or you can see it by hovering your mouse over the function name.
 
 > **Function Signatures** are **very important**, as you will discover in the next chapter; get used to looking at them.
 
@@ -186,25 +188,29 @@ let calculateTotal customer spend =
     spend - discount
 ```
 
-The IDE should still display the function signature as **Customer -> decimal -> decimal**. I also removed the total binding as I don't think it adds anything to the readability of the function.
+The IDE should still display the function signature as `Customer -> decimal -> decimal`. I also removed the `total` binding as I don't think it adds anything to the readability of the function.
 
-> Don't forget to highlight the code you've written so far and press ALT + ENTER to run it in F# Interactive (FSI).
+> Don't forget to highlight the code you've written so far and press `ALT+ENTER` to run it in F# Interactive (FSI).
 
-Whilst type inference works extremely well, there are some situations where it doesn't and you will need to provide a type to a parameter. One of the cases is where you are using a .NET function like ```DateTime.TryParse```. The problem here is that that function has two overrides and the compiler can't determine which one it needs to use.
+Whilst type inference works extremely well, there are some situations where it doesn't and you will need to provide a type to a parameter. One of the cases is where you are using a .NET function like `DateTime.TryParse`. The problem here is that that function has two overrides and the compiler can't determine which one it needs to use.
 
-Now that we have finished making changes to the function, we need to create a customer from our specification below the *calculateTotal* function and run in FSI:
+> **First-Class Functions**
+>
+> OOP state + behaviour vs FP types + functions
+
+Now that we have finished making changes to the function, we need to create a customer from our specification below the `calculateTotal` function and run in FSI:
 
 ```fsharp
 let john = { Id = "John"; IsEligible = true; IsRegistered = true }
 ```
 
-Rather than write a formal test, we can use FSI to run simple verifications for us. We will look at writing proper unit tests in chapter 4. Write the following after the *john* binding:
+Rather than write a formal test, we can use FSI to run simple verifications for us. We will look at writing proper unit tests in Chapter 4. Write the following after the `john` binding:
 
 ```fsharp
 let assertJohn = (calculateTotal john 100.0M = 90.0M)
 ```
 
-Highlight all of the code and press ALT + ENTER to run the code in FSI. What you should see is the following:
+Highlight all of the code and press `ALT+ENTER` to run the code in FSI. What you should see is the following:
 
 ```fsharp
 val assertJohn : bool = true
@@ -224,9 +230,9 @@ let assertRichard = (calculateTotal richard 100.0M = 100.0M) // bool
 let assertSarah = (calculateTotal sarah 100.0M = 100.0M) // bool
 ```
 
-> **Multi-purpose ```=``` operator**
+> **Multi-purpose `=` operator**
 >
-> There is no such thing as ```==``` or even ```===``` in F#. We use ```=``` for binding, setting property values, and equality. The one place where we don't use it is for updating values of mutable bindings. To update mutable bindings, we use the `<-` operator:
+> There is no such thing as `==` or even `===` in F#. We use `=` for binding, setting property values, and equality. The one place where we don't use it is for updating values of mutable bindings. To update mutable bindings, we use the `<-` operator:
 >
 > ```fsharp
 > let mutable myInt = 0
@@ -237,7 +243,7 @@ let assertSarah = (calculateTotal sarah 100.0M = 100.0M) // bool
 >
 > Notice that we have to explicitly define a binding as mutable.
 
-Highlight the new code and press ALT + ENTER. You should see the following in FSI.
+Highlight the new code and press `ALT+ENTER`. You should see the following in FSI.
 
 ```fsharp
 val assertJohn : bool = true
@@ -260,7 +266,7 @@ To add clarity, we could add a new function that would perform the equality chec
 ```fsharp
 // 'a -> 'a -> bool (' means generic)
 let areEqual expected actual =
-	actual = expected
+    actual = expected
 
 let assertJohn = areEqual 90.0M (calculateTotal john 100.0M)
 let assertMary = areEqual 99.0M (calculateTotal mary 99.0M)
@@ -268,7 +274,7 @@ let assertRichard = areEqual 100.0M (calculateTotal richard 100.0M)
 let assertSarah = areEqual 100.0M (calculateTotal sarah 100.0M) 
 ```
 
-The *areEqual* function is generic because the compiler has determined that any two values of the same type could be compared using the equality operator.
+The `areEqual` function is `Generic` because the compiler has determined that any two values of the same `Type` could be compared using the equality operator (`=`).
 
 Using the first version of the asserts, our code should now look like this:
 
@@ -297,13 +303,13 @@ let assertRichard = (calculateTotal richard 100.0M = 100.0M)
 let assertSarah = (calculateTotal sarah 100.0M = 100.0M)
 ```
 
-Whilst this code works, having boolean properties representing domain concepts is not the most robust approach. In addition, it is possible to be in an invalid state where a customer could be eligible but not registered. To prevent this, we could have added a check for ```customer.IsRegistered = true``` but it is easy to forget to do this. Instead, we will take advantage of the F# type system and make domain concepts like *Registered* and *Unregistered* explicit.
+Whilst this code works, having boolean properties representing domain concepts is not the most robust approach. In addition, it is possible to be in an invalid state where a customer could be `Eligible` but not `Registered`. To prevent this, we could have added a check for `customer.IsRegistered = true` but it is easy to forget to do this. Instead, we will take advantage of the F# type system and make domain concepts like `Registered` and `Unregistered` explicit.
 
 ## Making the Implicit Explicit
 
-Create a new file called 'part2.fsx' and copy the final code from part1.fsx into it. We are going to modify the code in part2.fsx in this section.
+Create a new file called *part2.fsx* and copy the final code from *part1.fsx* into it. We are going to modify the code in *part2.fsx* in this section.
 
-Firstly, we create specific record types for *Registered* and *Unregistered* customers.
+Firstly, we create specific `Record` types for `Registered` and `Unregistered` customers.
 
 ```fsharp
 type RegisteredCustomer = {
@@ -312,7 +318,7 @@ type RegisteredCustomer = {
 }
 
 type UnregisteredCustomer = {
-	Id : string
+    Id : string
 }
 ```
 
@@ -324,7 +330,7 @@ type Customer =
     | Guest of UnregisteredCustomer
 ```
 
-This reads as "a customer can either be *Registered* of type *RegisteredCustomer* or a *Guest* of type *UnregisteredCustomer*". The items are called Union Cases and consist of a Case Identifier, in this example *Registered*/*Guest*, and some optional Case Data. You can optionally attach any type or mixture of types to a union case. 
+This reads as "a customer can either be *Registered* of type *RegisteredCustomer* or a *Guest* of type *UnregisteredCustomer*". The items are called Union Cases and consist of a Case Identifier, in this example *Registered*/*Guest*, and some optional Case Data. You can optionally attach any type or mixture of types to a union case.
 
 Discriminated unions are closed sets, so only the cases described in the type definition are available. The only place that cases can be defined is in the type definition.
 
