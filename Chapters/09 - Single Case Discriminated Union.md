@@ -208,7 +208,7 @@ let calculateTotal customer (spend:Spend) =
     spend.Value - discount
 ```
 
-Which type abbreviations you apply to function parameters depends on how much the code is likely to change and whether it's important to retain the same signature. Type inference works very well most of the time and you should learn to rely on it but sometimes, it makes sense to specify the types.
+Which type annotations you apply to function parameters depends on how much the code is likely to change and whether it's important to retain the same signature. Type inference works very well most of the time and you should learn to rely on it but sometimes, it makes sense to specify the types.
 
 We also need to fix the asserts since we are now returning a `Result<Spend,ValidationError>` instead of a *Spend*:
 
