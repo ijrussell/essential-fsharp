@@ -1,10 +1,10 @@
 # 9 - Single-Case Discriminated Union
 
-In this chapter, we are going to improve the robustness and readability of our code by increasing our use of domain concepts and reducing our use of primitives. The primary approach adopted by the F# community for this task is the Single-Case Discriminated Union.
+In this chapter, we are going to improve the robustness and readability of our code by increasing our use of domain concepts and reducing our use of primitives. The primary approach adopted by the F# community for this task is the `Single-Case Discriminated Union`.
 
 ## Setting Up
 
-We are going to improve the code that we wrote in Chapter 1. 
+We are going to improve some of the code we wrote in Chapter 1.
 
 Create a new folder for the code in this chapter and open the new folder in VS Code.
 
@@ -43,7 +43,7 @@ let sarah = Guest { Id = "Sarah" }
 
 // 'a -> 'a -> bool
 let isEqualTo expected actual =
-	actual = expected
+    actual = expected
 
 let assertJohn = calculateTotal john 100.0M |> isEqualTo 90.0M
 let assertMary = calculateTotal mary 99.0M |> isEqualTo 99.0M
@@ -53,7 +53,7 @@ let assertSarah = calculateTotal sarah 100.0M |> isEqualTo 100.0M
 
 Copy the code into *code.fsx*.
 
-It's nice but we still have some primitives where we should have domain concepts (Spend and Total). I would like the signature of the `calculateTotal` function to change from `Customer -> decimal -> decimal` to `Customer -> Spend -> Total`. The easiest way to achieve this is to use Type Abbreviations, which are simple aliases:
+It's nice but we still have some primitives where we should have domain concepts (Spend and Total). I would like the signature of the `calculateTotal` function to change from `Customer -> decimal -> decimal` to `Customer -> Spend -> Total`. The easiest way to achieve this is to use `Type Abbreviations`, which are simple aliases:
 
 ```fsharp
 type Spend = decimal
@@ -91,7 +91,7 @@ Note the change in the way that input parameters are used with the type abbrevia
 
 Either approach gives us the signature we want. Both styles are useful to know, but for the rest of this chapter, we will use the first style without the type abbreviation for the function signature.
 
-There is a potential problem with type abbreviations; if the underlying type matches, I can use anything for the input, not just the limited range of values expected for *Spend*. There is nothing stopping you from supplying either an invalid value or the wrong value to a parameter as shown in this example code with GPS coordinates:
+There is a potential problem with type abbreviations; if the underlying type matches, I can use anything for the input, not just the limited range of values expected for `Spend`. There is nothing stopping you from supplying either an invalid value or the wrong value to a parameter as shown in this example code with GPS coordinates:
 
 ```fsharp
 type Latitude = decimal
@@ -110,9 +110,9 @@ let longitude = 15M
 let badGps2 : GpsCoordinate = { Latitude = longitude; Longitude = latitude }
 ```
 
-We can write tests to prevent this from happening but that is additional work. Instead, we want the type system to help us to write safer code and prevent this from happening. Thankfully, there are a number of ways that we can prevent these scenarios in F#. We will start with the Single-Case Discriminated Union.
+We can write tests to prevent this from happening but that is additional work. Instead, we want the type system to help us to write safer code and prevent this from happening. This is the role of features like the `Single-Case Discriminated Union`.
 
-Let's define one for *Spend* by replacing the existing code with:
+Let's define one for `Spend` by replacing the existing code with:
 
 ```fsharp
 type Spend = Spend of decimal
@@ -122,12 +122,12 @@ If you hover your mouse over the first spend you will see the following tooltip:
 
 ```fsharp
 union Spend =
-	| Spend of decimal
+    | Spend of decimal
 ```
 
 It is the convention to omit the bar (`|`) for unions that contain only a single case.
 
-You will notice that the `calculateTotal` function now has errors. We can fix that by deconstructing the *Spend* parameter value in the function using pattern matching:
+You will notice that the `calculateTotal` function now has errors. We can fix that by deconstructing the `Spend` parameter value in the function using pattern matching:
 
 ```fsharp
 let calculateTotal (customer:Customer) (spend:Spend) : Total =
@@ -139,7 +139,7 @@ let calculateTotal (customer:Customer) (spend:Spend) : Total =
     value - discount
 ```
 
-If the *Spend* type had been defined as `type Spend = xSpend of decimal`, the deconstructor would have been `xSpend value` rather than `Spend value`.
+If the `Spend` type had been defined as `type Spend = xSpend of decimal`, the deconstructor would have been `xSpend value` rather than `Spend value`.
 
 We need to change the asserts to use the new type constructor:
 
@@ -164,7 +164,7 @@ let calculateTotal customer (Spend spend) =
 
 If you replace all of your primitives and type abbreviations with single-case discriminated unions, you cannot supply the wrong parameter as the compiler will stop you. Of course, it doesn't stop the determined from abusing our code but it is another hurdle they must overcome.
 
-The next improvement is to restrict the range of values that the *Spend* type can accept since very few domain values will be unbounded. We will restrict *Spend* to between 0.0M and 1000.0M. To support this, we are going to add a *ValidationError* type and prevent the direct use of the *Spend* constructor:
+The next improvement is to restrict the range of values that the `Spend` type can accept since very few domain values will be unbounded. We will restrict `Spend` to between 0.0M and 1000.0M. To support this, we are going to add a `ValidationError` type and prevent the direct use of the `Spend` constructor:
 
 ```fsharp
 type ValidationError = 
@@ -180,7 +180,7 @@ type Spend = private Spend of decimal
                 Error (InputOutOfRange "You can only spend between 0 and 1000")
 ```
 
-The use of the private accessor prevents code outside the containing module from directly accessing the type constructor. This means that to create an instance of Spend, we need to use the `Spend.Create` static member function defined on the type.
+The use of the private accessor prevents code outside the containing module from directly accessing the type constructor. This means that to create an instance of `Spend`, we need to use the `Create` static member function defined on the type.
 
 To extract the value, we use the `Value` member property defined on the instance. Although it is common to use `this` to describe the instance, it has no meaning in F#; `this` is just an identifier and we could have easily used `x` or `s`. If we hadn't used the identifier in the logic for extracting the value, we could have used the underscore `_`, although again it has no real meaning in this situation; it's just an identifier.
 
@@ -210,7 +210,7 @@ let calculateTotal customer (spend:Spend) =
 
 Which type annotations you apply to function parameters depends on how much the code is likely to change and whether it's important to retain the same signature. Type inference works very well most of the time and you should learn to rely on it but sometimes, it makes sense to specify the types.
 
-We also need to fix the asserts since we are now returning a `Result<Spend,ValidationError>` instead of a *Spend*:
+We also need to fix the asserts since we are now returning a `Result<Spend,ValidationError>` instead of a `Spend`:
 
 ```fsharp
 let isEqualTo expected actual =
@@ -227,11 +227,13 @@ let assertRichard = assertEqual richard 100.0M 100.0M
 let assertSarah = assertEqual sarah 100.0M 100.0M
 ```
 
-We have done some extra work to the Spend type but by doing so we have ensured that an instance of it can never be invalid.
+We have done some extra work to the `Spend` type but by doing so we have ensured that an instance of it can never be invalid.
 
 As a piece of homework, think about how you would use the features we have covered in this chapter on the code from the last chapter.
 
-Another change that we can make is to move the discount rate from the `calculateTotal` function to be with the *Customer* type definition. The primary reason for doing this would be for re-use:
+## Adding Members to Types
+
+Another change that we can make is to move the discount rate from the `calculateTotal` function to be with the `Customer` type definition. The primary reason for doing this would be for re-use:
 
 ```fsharp
 type Customer =
@@ -250,12 +252,12 @@ This also allows us to simplify the `calculateTotal` function:
 ```fsharp
 let calculateTotal (customer:Customer) (spend:Spend) =
     let discount = 
-    	if spend.Value >= 100.0M then spend.Value * customer.Discount 
-    	else 0.0M
+        if spend.Value >= 100.0M then spend.Value * customer.Discount 
+        else 0.0M
     spend.Value - discount
 ```
 
-Whilst this looks nice, it has broken the link between the *Customer* type and the *Spend* value. Remember, the rule is a 10% discount if an eligible customer spends 100.0 or more. Let's have another go:
+Whilst this looks nice, it has broken the link between the `Customer` type and the `Spend` value. Remember, the rule is a 10% discount if an eligible customer spends 100.0 or more. Let's have another go:
 
 ```fsharp
 type Customer =
@@ -276,20 +278,20 @@ We now need to modify the `calculateTotal` function to use our new member functi
 
 ```fsharp
 let calculateTotal (customer:Customer) (spend:Spend) =
-    let discount = spend.Value * customer.CalculateDiscountPercentage spend
+    let discount = spend.Value * customer.CalculateDiscountPercentage(spend)
     spend.Value - discount
 ```
 
-To run this code, you will need to load all of the code back into FSI using ```ALT+ENTER``` as we have changed quite a lot of code. Your tests should still pass.
+To run this code, you will need to load all of the code back into FSI using `ALT+ENTER` as we have changed quite a lot of code. Your tests should still pass.
 
 A final change would be to simplify the `calculateTotal` function:
 
 ```fsharp
 let calculateTotal customer spend =
-    spend.Value * (1.0M - customer.CalculateDiscountPercentage spend)
+    spend.Value * (1.0M - customer.CalculateDiscountPercentage(spend))
 ```
 
-Having done all of this work, I'm going to suggest that we don't use this approach. We should try to maintain a clean separation between data and behaviour. This isn't a rule, just strong guidance. Thankfully, there are other approaches that we can use instead.
+Having done all of this work, I'm going to suggest that we try to avoid using this approach and instead try to maintain a clean separation between data and behaviour. This isn't a rule, just strong guidance. Thankfully, there are other approaches that we can use instead.
 
 ## Using Modules
 
@@ -302,19 +304,21 @@ type Customer =
     | Guest of UnregisteredCustomer
 
 module Customer =
-	let calculateDiscountPercentage (spend:Spend) customer =
+    let calculateDiscountPercentage (spend:Spend) customer =
         match customer with
         | Eligible _ -> if spend.Value >= 100.0M then 0.1M else 0.0M
         | _ -> 0.0M
 ```
 
-You may have noticed when dealing with other modules like *List* or *Option* that it is the convention to pass in the instance of the defining type as the last parameter.
+You may have noticed when dealing with other modules like `List` or `Option` that it is the convention to pass in the instance of the defining type as the last parameter.
 
 We again need to modify our `calculateTotal` function:
 
 ```fsharp
 let calculateTotal customer spend =
-    let discountPercentage = customer |> Customer.calculateDiscountPercentage spend
+    let discountPercentage = 
+        customer 
+        |> Customer.calculateDiscountPercentage spend
     spend.Value * (1.0M - discountPercentage)
 ```
 
@@ -342,13 +346,13 @@ module Customer =
         | Eligible _ -> if Spend.Value spend >= 100.0M then 0.1M else 0.0M
         | _ -> 0.0M
 
-    let calculateTotal customer spend =
+    let calculateTotal spend customer =
         customer 
         |> calculateDiscountPercentage spend
         |> fun discountPercentage -> spend.Value * (1.0M - discountPercentage)
 ```
 
-You can also move the functions for the *Spend* type to a module as well.
+You can also move the functions for the `Spend` type to a module as well.
 
 ```fsharp
 type Spend = private Spend of decimal
@@ -374,7 +378,7 @@ module Customer =
         | Eligible _ -> if Spend.value spend >= 100.0M then 0.1M else 0.0M
         | _ -> 0.0M
 
-    let calculateTotal customer spend =
+    let calculateTotal spend customer =
         customer 
         |> calculateDiscountPercentage spend
         |> fun discountPercentage -> Spend.value spend * (1.0M - discountPercentage)
@@ -385,7 +389,7 @@ We also need to make one change to the assertion helper functions as we have mov
 ```fsharp
 let assertEqual customer spent expected =
     Spend.create spent
-    |> Result.map (fun spend -> Customer.calculateTotal customer spend)
+    |> Result.map (fun spend -> customer |> Customer.calculateTotal spend)
     |> isEqualTo (Ok expected)
 ```
 
@@ -393,7 +397,7 @@ If you run all of the code through FSI, your asserts will now pass again.
 
 ## A Few Minor Improvements
 
-There are a few minor improvements that we can implement quite easily. Firstly, we will replace the string used in the *Customer* record types with a single-case discriminated union called *CustomerId*. We will add type abbreviations for *Total* and *DiscountPercentage*. Finally, we need to fix the compile errors. This is what we end up with:
+There are a few minor improvements that we can implement quite easily. Firstly, we will replace the string used in the `Customer` record types with a single-case discriminated union called `CustomerId`. We will add type abbreviations for `Total` and `DiscountPercentage`. Finally, we need to fix the compile errors. This is what we end up with:
 
 ```fsharp
 type CustomerId = CustomerId of string
@@ -438,7 +442,7 @@ module Customer =
         | _ -> 0.0M
 
     // Customer -> Spend -> Total
-    let calculateTotal customer spend : Total =
+    let calculateTotal spend customer : Total =
         customer 
         |> calculateDiscountPercentage spend
         |> fun discountPercentage -> Spend.value spend * (1.0M - discountPercentage)
@@ -453,7 +457,7 @@ let isEqualTo expected actual =
 
 let assertEqual customer spent expected =
     Spend.create spent
-    |> Result.map (fun spend -> Customer.calculateTotal customer spend)
+    |> Result.map (fun spend -> customer |> Customer.calculateTotal spend)
     |> isEqualTo (Ok expected)
 
 let assertJohn = assertEqual john 100.0M 90.0M
