@@ -14,6 +14,6 @@ You can download this book for free in PDF and EPUB formats from the following l
 
 Contributions to the book are very welcome. 
 
-Follow me on BlueSky -> [https://x.com/ijrussell](https://bsky.app/profile/ijrussell.bsky.social)
+Follow me on BlueSky -> https://bsky.app/profile/ijrussell.bsky.social
 
 Read my blog -> https://ijrussell.github.io/
